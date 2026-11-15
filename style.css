@@ -351,3 +351,22 @@ body.cart-is-open { overflow: hidden; }
   cursor: pointer;
 }
 .cart-remove:hover { background: rgba(255,235,239,.95); }
+
+
+/* Animated plus-to-check confirmation on menu add buttons */
+.add-button .add-icon {
+  display: inline-block;
+  line-height: 1;
+  transform-origin: center;
+}
+.add-button .add-icon-check {
+  animation: plusToCheck .38s cubic-bezier(.2,.8,.25,1) both;
+}
+@keyframes plusToCheck {
+  0% { opacity: 0; transform: rotate(-135deg) scale(.25); }
+  65% { opacity: 1; transform: rotate(18deg) scale(1.18); }
+  100% { opacity: 1; transform: rotate(0) scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .add-button .add-icon-check { animation: none; }
+}
