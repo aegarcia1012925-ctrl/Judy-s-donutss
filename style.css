@@ -304,7 +304,8 @@ body.cart-is-open { overflow: hidden; }
 .cart-floating-button {
   position: fixed;
   z-index: 30;
-  right: 18px;
+  left: 18px;
+  right: auto;
   bottom: 18px;
   display: inline-flex;
   align-items: center;
@@ -325,7 +326,7 @@ body.cart-is-open { overflow: hidden; }
 .cart-floating-count { display: grid; place-items: center; min-width: 22px; height: 22px; padding: 0 5px; border-radius: 50%; color: var(--pink-deep); background: #fff; font-size: 10px; }
 .cart-floating-button:focus-visible { outline: 3px solid rgba(201,74,103,.4); outline-offset: 4px; }
 @media (min-width: 851px) {
-  .cart-floating-button { right: 24px; bottom: 24px; }
+  .cart-floating-button { left: 24px; right: auto; bottom: 24px; }
 }
 
 /* Persistent selected state for donut menu buttons */
