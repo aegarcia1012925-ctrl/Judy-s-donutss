@@ -79,15 +79,35 @@ function showToast(message) {
   toastTimer = window.setTimeout(() => toast.classList.remove("show"), 2800);
 }
 
+// Product-card buttons work as persistent add/remove toggles.
+function toggleProductInCart(name) {
+  if (!products[name]) return;
+  if (cart.has(name)) {
+    cart.delete(name);
+    showToast(name + " removed from your cart.");
+  } else {
+    cart.set(name, 1);
+    showToast(name + " added to your cart!");
+    openCart();
+  }
+  renderCart();
+}
+
+// Recommendations and cart controls can still increase quantities.
 function addToCart(name) {
   if (!products[name]) return;
   cart.set(name, (cart.get(name) || 0) + 1);
   renderCart();
-  openCart();
   showToast(name + " added to your cart!");
 }
 
 function changeQuantity(name, change) {
+  if (change === "remove") {
+    cart.delete(name);
+    renderCart();
+    showToast(name + " removed from your cart.");
+    return;
+  }
   const next = (cart.get(name) || 0) + change;
   if (next <= 0) cart.delete(name);
   else cart.set(name, next);
@@ -138,13 +158,31 @@ function renderCart() {
       plus.setAttribute("aria-label", "Add one " + name);
       plus.textContent = "+";
       controls.append(minus, amount, plus);
+      const remove = document.createElement("button");
+      remove.type = "button";
+      remove.className = "cart-remove";
+      remove.dataset.cartAction = "remove";
+      remove.dataset.product = name;
+      remove.setAttribute("aria-label", "Remove " + name + " from cart");
+      remove.textContent = "Remove";
       const lineTotal = document.createElement("strong");
       lineTotal.className = "cart-line-total";
       lineTotal.textContent = money(products[name].price * quantity);
-      row.append(info, controls, lineTotal);
+      row.append(info, controls, lineTotal, remove);
       cartItems.append(row);
     });
   }
+
+  // Keep each menu button visually selected while its product is in the cart.
+  document.querySelectorAll("[data-donut]").forEach(button => {
+    const selected = cart.has(button.dataset.donut);
+    button.classList.toggle("is-added", selected);
+    button.textContent = selected ? "✓" : "+";
+    button.setAttribute("aria-pressed", String(selected));
+    button.setAttribute("aria-label", selected
+      ? "Remove " + button.dataset.donut + " from your order"
+      : "Add " + button.dataset.donut + " to your order");
+  });
 
   if (cartNavCount) cartNavCount.textContent = String(totalQuantity);
   if (cartFloatingCount) cartFloatingCount.textContent = String(totalQuantity);
@@ -205,7 +243,7 @@ function closeCart() {
 }
 
 document.querySelectorAll("[data-donut]").forEach(button => {
-  button.addEventListener("click", () => addToCart(button.dataset.donut));
+  button.addEventListener("click", () => toggleProductInCart(button.dataset.donut));
 });
 if (openCartBtn) openCartBtn.addEventListener("click", openCart);
 if (cartFloatingBtn) cartFloatingBtn.addEventListener("click", openCart);
@@ -215,7 +253,8 @@ if (cartItems) {
   cartItems.addEventListener("click", event => {
     const button = event.target.closest("[data-cart-action]");
     if (!button) return;
-    changeQuantity(button.dataset.product, button.dataset.cartAction === "increase" ? 1 : -1);
+    const action = button.dataset.cartAction;
+    changeQuantity(button.dataset.product, action === "increase" ? 1 : action === "remove" ? "remove" : -1);
   });
 }
 if (recommendationList) {
