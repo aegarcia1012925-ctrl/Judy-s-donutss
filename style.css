@@ -370,3 +370,13 @@ body.cart-is-open { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) {
   .add-button .add-icon-check { animation: none; }
 }
+
+
+/* Prevent the browser's blue tap flash on donut add buttons */
+.add-button {
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+}
+.add-button:active {
+  -webkit-tap-highlight-color: transparent;
+}
