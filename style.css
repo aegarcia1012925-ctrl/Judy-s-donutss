@@ -327,3 +327,26 @@ body.cart-is-open { overflow: hidden; }
 @media (min-width: 851px) {
   .cart-floating-button { right: 24px; bottom: 24px; }
 }
+
+/* Persistent selected state for donut menu buttons */
+.add-button.is-added {
+  color: #fff !important;
+  background: linear-gradient(145deg,rgba(211,91,122,.98),rgba(173,55,87,.96)) !important;
+  border-color: rgba(255,255,255,.88) !important;
+  box-shadow: 0 8px 22px rgba(173,55,87,.25),inset 0 1px 1px rgba(255,255,255,.55) !important;
+  transform: scale(1.04);
+}
+.add-button.is-added::after { content: " Added"; font-size: 10px; margin-left: 4px; }
+.cart-remove {
+  grid-column: 1 / -1;
+  justify-self: end;
+  padding: 5px 9px;
+  border: 1px solid rgba(173,55,87,.18);
+  border-radius: 999px;
+  color: #a93858;
+  background: rgba(255,255,255,.62);
+  font: inherit;
+  font-size: 10px;
+  cursor: pointer;
+}
+.cart-remove:hover { background: rgba(255,235,239,.95); }
