@@ -88,7 +88,6 @@ function toggleProductInCart(name) {
   } else {
     cart.set(name, 1);
     showToast(name + " added to your cart!");
-    openCart();
   }
   renderCart();
 }
