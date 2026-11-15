@@ -176,7 +176,9 @@ function renderCart() {
   document.querySelectorAll("[data-donut]").forEach(button => {
     const selected = cart.has(button.dataset.donut);
     button.classList.toggle("is-added", selected);
-    button.textContent = selected ? "✓" : "+";
+    button.innerHTML = selected
+      ? '<span class="add-icon add-icon-check" aria-hidden="true">✓</span>'
+      : '<span class="add-icon" aria-hidden="true">+</span>';
     button.setAttribute("aria-pressed", String(selected));
     button.setAttribute("aria-label", selected
       ? "Remove " + button.dataset.donut + " from your order"
