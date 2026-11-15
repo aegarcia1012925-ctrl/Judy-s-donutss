@@ -61,6 +61,8 @@ const closeCartBtn = document.getElementById("closeCartBtn");
 const cartItems = document.getElementById("cartItems");
 const cartSubtotal = document.getElementById("cartSubtotal");
 const cartNavCount = document.getElementById("cartNavCount");
+const cartFloatingBtn = document.getElementById("cartFloatingBtn");
+const cartFloatingCount = document.getElementById("cartFloatingCount");
 const recommendationList = document.getElementById("recommendationList");
 const checkoutButton = document.getElementById("checkoutButton");
 let toastTimer;
@@ -81,6 +83,7 @@ function addToCart(name) {
   if (!products[name]) return;
   cart.set(name, (cart.get(name) || 0) + 1);
   renderCart();
+  openCart();
   showToast(name + " added to your cart!");
 }
 
@@ -144,6 +147,7 @@ function renderCart() {
   }
 
   if (cartNavCount) cartNavCount.textContent = String(totalQuantity);
+  if (cartFloatingCount) cartFloatingCount.textContent = String(totalQuantity);
   if (orderCount) {
     orderCount.hidden = totalQuantity === 0;
     orderCount.textContent = "Your box: " + totalQuantity + (totalQuantity === 1 ? " item" : " items");
@@ -182,6 +186,7 @@ function openCart() {
   cartDrawer.classList.add("is-open");
   cartDrawer.setAttribute("aria-hidden", "false");
   if (openCartBtn) openCartBtn.setAttribute("aria-expanded", "true");
+  if (cartFloatingBtn) cartFloatingBtn.setAttribute("aria-expanded", "true");
   document.body.classList.add("cart-is-open");
   if (closeCartBtn) closeCartBtn.focus();
 }
@@ -191,9 +196,10 @@ function closeCart() {
   cartDrawer.classList.remove("is-open");
   cartDrawer.setAttribute("aria-hidden", "true");
   cartBackdrop.hidden = true;
-  if (openCartBtn) {
-    openCartBtn.setAttribute("aria-expanded", "false");
-    openCartBtn.focus();
+  if (openCartBtn) openCartBtn.setAttribute("aria-expanded", "false");
+  if (cartFloatingBtn) {
+    cartFloatingBtn.setAttribute("aria-expanded", "false");
+    cartFloatingBtn.focus();
   }
   document.body.classList.remove("cart-is-open");
 }
@@ -202,6 +208,7 @@ document.querySelectorAll("[data-donut]").forEach(button => {
   button.addEventListener("click", () => addToCart(button.dataset.donut));
 });
 if (openCartBtn) openCartBtn.addEventListener("click", openCart);
+if (cartFloatingBtn) cartFloatingBtn.addEventListener("click", openCart);
 if (closeCartBtn) closeCartBtn.addEventListener("click", closeCart);
 if (cartBackdrop) cartBackdrop.addEventListener("click", closeCart);
 if (cartItems) {
